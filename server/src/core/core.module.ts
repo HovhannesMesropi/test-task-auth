@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config as dotEnvConfig } from 'dotenv';
 import { User } from 'src/entities/user.entity';
+import { HashingService } from './services/hashing.service';
 
 dotEnvConfig();
 
@@ -26,7 +27,7 @@ const EntitiesForFeature = TypeOrmModule.forFeature([User]);
 @Module({
   imports: [ORM, JWT, EntitiesForFeature],
   controllers: [],
-  providers: [],
-  exports: [ORM, JWT, EntitiesForFeature],
+  providers: [HashingService],
+  exports: [ORM, JWT, HashingService, EntitiesForFeature],
 })
 export class CoreModule {}
