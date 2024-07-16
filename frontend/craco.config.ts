@@ -10,8 +10,8 @@ const cracoConfig: CracoConfig = {
         'prettier/prettier': 'error',
       };
       return eslintConfig;
-    }
-  }
+    },
+  },
 };
 
 export default cracoConfig;
