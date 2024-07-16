@@ -96,13 +96,13 @@ export class AuthService {
     return await this.usersRepository.findOne({ where: { token } });
   }
 
-  async usersList() {
-    return (await this.usersRepository.find()).map((user) => {
-      delete user.password;
-      delete user.token;
-      delete user.refreshToken;
+  async userInfo(token) {
+    const user = await this.usersRepository.findOne({ where: { token } });
 
-      return user;
-    });
+    delete user.password;
+    delete user.token;
+    delete user.refreshToken;
+
+    return user;
   }
 }

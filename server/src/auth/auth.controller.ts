@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/sign-up.dto';
 import { AuthService } from './auth.service';
 import { SignInUserDTO } from './dto/sign-in.dto';
@@ -14,10 +21,17 @@ export class AuthController {
     try {
       const tokens = await this.authService.createTokens(signInUserDTO);
 
-      return tokens;
+      return {
+        body: tokens,
+        message: 'success',
+        status: true,
+      };
     } catch (err) {
       console.log('sign-in', err);
-      return 'Invalid email or password';
+      return {
+        message: 'Invalid email or password',
+        status: false,
+      };
     }
   }
 
@@ -26,28 +40,43 @@ export class AuthController {
     try {
       await this.authService.createUser(createUserDto);
 
-      return true;
+      return {
+        message: 'User created',
+        status: true,
+      };
     } catch (err) {
       console.log('sign-up', err);
-      return 'User already exists';
+      return {
+        message: 'User already exists',
+        status: false,
+      };
     }
   }
 
   @Post('refresh-tokens')
   async refreshTokens(@Body() refreshTokenDTO: RefreshTokenDTO) {
     try {
-      return await this.authService.recreateTokens(
+      const tokens = await this.authService.recreateTokens(
         refreshTokenDTO.refreshToken,
       );
+
+      return {
+        body: tokens,
+        message: 'success',
+        status: true,
+      };
     } catch (err) {
       console.log('refresh-tokens', err);
-      return 'invalid refresh token';
+      return {
+        message: 'invalid refresh token',
+        status: false,
+      };
     }
   }
 
-  @Get('get-users')
+  @Get('user-info')
   @UseGuards(AuthGuard)
-  async getUsers() {
-    return this.authService.usersList();
+  async getUser(@Headers() headers) {
+    return this.authService.userInfo(headers.token);
   }
 }
