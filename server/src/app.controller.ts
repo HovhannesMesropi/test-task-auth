@@ -4,7 +4,7 @@ export class AppController {
   constructor() {}
 
   @Get()
-  getHello(): string {
-    return 'Hello World';
+  getHello() {
+    return 'api v1';
   }
 }

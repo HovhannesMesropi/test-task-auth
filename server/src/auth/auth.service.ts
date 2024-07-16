@@ -95,4 +95,14 @@ export class AuthService {
   async findUserByToken(token) {
     return await this.usersRepository.findOne({ where: { token } });
   }
+
+  async usersList() {
+    return (await this.usersRepository.find()).map((user) => {
+      delete user.password;
+      delete user.token;
+      delete user.refreshToken;
+
+      return user;
+    });
+  }
 }

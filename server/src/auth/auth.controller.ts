@@ -47,7 +47,7 @@ export class AuthController {
 
   @Get('get-users')
   @UseGuards(AuthGuard)
-  getUsers(): string {
-    return 'Hello World';
+  async getUsers() {
+    return this.authService.usersList();
   }
 }
